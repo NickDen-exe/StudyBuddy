@@ -1,0 +1,23 @@
+# venv
+venv/
+
+# секреты
+.env
+
+# python мусор
+__pycache__/
+*.pyc
+*.pyo
+
+# chroma / данные векторной базы
+chroma_db/
+
+# IDE
+.vscode/
+
+# OS мусор
+.DS_Store
+Thumbs.db
+
+# логи
+*.log
