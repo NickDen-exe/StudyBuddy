@@ -9,6 +9,9 @@ __pycache__/
 *.pyc
 *.pyo
 
+# тестовые файлы
+data/
+
 # chroma / данные векторной базы
 chroma_db/
 
