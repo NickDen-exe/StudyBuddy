@@ -5,6 +5,12 @@ from pathlib import Path
 
 DOCS_PATH = "./data"
 
+def read_data():
+    pdf_docs, docx_docs = load_docs()
+    data = []
+    data.extend(read_pdf(pdf_docs))
+    data.extend(read_docx(docx_docs))
+    return data
 
 def load_docs():
     pdf_docs = []
@@ -52,11 +58,3 @@ def read_docx(docx_docs):
         except Exception as e:
             print(f"Error reading DOCX file {docx_doc.name}: {e}")
     return docx_data
-
-
-def read_data():
-    pdf_docs, docx_docs = load_docs()
-    data = []
-    data.extend(read_pdf(pdf_docs))
-    data.extend(read_docx(docx_docs))
-    return data
