@@ -1,6 +1,7 @@
 import pymupdf
 import docx
 import os
+import re
 from pathlib import Path
 
 DOCS_PATH = "./data"
@@ -38,7 +39,7 @@ def read_pdf(pdf_docs):
         try:
             doc = pymupdf.Document(pdf_doc)
             for page in doc:
-                text = page.get_text()
+                text = clean_text(page.get_text())
                 pdf_data.append({"text": text, "page": page.number + 1, "source": pdf_doc.name})
             doc.close()
         except Exception as e:
@@ -52,9 +53,13 @@ def read_docx(docx_docs):
         try:
             doc = docx.Document(docx_doc)
             for i, paragraph in enumerate(doc.paragraphs):
-                text = paragraph.text.strip()
+                text = clean_text(paragraph.text)
                 if text:
                     docx_data.append({"text": text, "paragraph": i + 1, "source": docx_doc.name})
         except Exception as e:
             print(f"Error reading DOCX file {docx_doc.name}: {e}")
     return docx_data
+
+def clean_text(text):
+    cleaned_text = re.sub(r'\s+', ' ', text).strip()
+    return cleaned_text
