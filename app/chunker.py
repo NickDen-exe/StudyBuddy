@@ -2,8 +2,8 @@ import re
 
 CHUNK_SIZE = 500
 OVERLAP = 50
-MIN_SAMPLE_SIZE = 5             # если слов меньше — не доверяем статистике, считаем текст нормальным
-MIXED_SCRIPT_THRESHOLD = 0.3    # доля "смешанных" слов, выше которой текст считаем битым
+MIN_SAMPLE_SIZE = 5             # if fewer words than this, don't trust the ratio — treat text as normal
+MIXED_SCRIPT_THRESHOLD = 0.15   # ratio of "mixed-script" words above which text is considered corrupted
 
 CYRILLIC_RE = re.compile(r'[а-яА-ЯіІїЇєЄґҐ]')
 LATIN_RE = re.compile(r'[a-zA-Z]')
@@ -40,5 +40,6 @@ def chunk_data(data, chunk_size=CHUNK_SIZE, overlap=OVERLAP):
             new_entry = entry.copy()
             new_entry["text"] = chunk
             new_entry["chunk_index"] = chunk_index
+            new_entry["is_corrupted"] = is_text_corrupted(chunk)
             chunked_records.append(new_entry)
     return chunked_records

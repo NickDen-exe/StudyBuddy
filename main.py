@@ -1,16 +1,14 @@
 from app.parser import read_data
-from app.chunker import is_text_corrupted, is_word_mixed_script, MIN_SAMPLE_SIZE
+from app.chunker import chunk_data
 
 data = read_data()
+chunked_data = chunk_data(data)
 
-for entry in data:
-    print("---")
-    print(entry["source"], entry.get("page", entry.get("paragraph")))
-    print(entry["text"][:80])
+print(f"Total chunks: {len(chunked_data)}")
+corrupted_count = sum(1 for entry in chunked_data if entry["is_corrupted"])
+print(f"Corrupted chunks: {corrupted_count}")
+print()
 
-    words = entry["text"].split()
-    mixed_words = [w for w in words if is_word_mixed_script(w)]
-    mixed_ratio = len(mixed_words) / len(words) if words else 0.0
-
-    print("mixed_ratio:", round(mixed_ratio, 2))
-    print("is_text_corrupted result:", is_text_corrupted(entry["text"]))
+for entry in chunked_data:
+    status = "CORRUPTED" if entry["is_corrupted"] else "ok"
+    print(f"[{status}] {entry['source']} chunk {entry['chunk_index']}: {entry['text'][:70]}")
